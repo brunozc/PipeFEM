@@ -86,7 +86,7 @@ def make_movie(results, output_folder, name, fct=1000, tmp_folder="tmp", step=10
         ax.plot(x_t, y_t, color='b')
         ax.set_xlabel("Time [s]")
         ax.set_ylabel("Displacement [m]")
-        ax.set_title(f"Time: {time[i]} s")
+        ax.set_title(f"Time: {time[i]: .4f} s")
         ax.set_xlim(xlimits)
         ax.set_ylim(ylimits)
         ax.grid()
