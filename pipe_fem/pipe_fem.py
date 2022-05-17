@@ -19,17 +19,17 @@ def pipe_fem(points, element_size, soil_properties, pipe_properties, force, sett
     k_soil = assembler.gen_stiff_soil(mesh.nodes, mesh.elements, soil_properties)
     c_soil = assembler.gen_damp_soil(mesh.nodes, mesh.elements, soil_properties)
 
-    # all matrix
-    M = m_pipe
-    K = k_pipe + k_soil
-
     # absorbing BC
     f_abs = assembler.absorbing_bc(mesh.nodes, mesh.elements, pipe_properties)
 
     # Rayleigh damping
     alpha, beta = assembler.damping(settings['Damping_parameters'])
-    C = M.tocsr().dot(alpha) + K.tocsr().dot(beta)
-    C = C + c_soil
+    c_pipe = m_pipe.tocsr().dot(alpha) + k_pipe.tocsr().dot(beta)
+
+    # all matrix
+    M = m_pipe
+    K = k_pipe + k_soil
+    C = c_pipe + c_soil
 
     print("Generating external force")
     # force
