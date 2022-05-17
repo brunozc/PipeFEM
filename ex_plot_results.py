@@ -18,4 +18,4 @@ plt.show()
 
 
 from pipe_fem.post_process import make_movie
-make_movie(data, "results", "displacement_field.gif", scale_fct=1e4, step=10)
+make_movie(data, "results", "displacement_field.gif", scale_fct=1e4, step=2)
