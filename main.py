@@ -9,7 +9,7 @@ p5 = [750, 0, 0]
 element_size = 0.25
 
 # Soil properties
-soil_properties = {"Coordinates": [60, 0, 0],
+soil_properties = {"Coordinates": [-10, 10, 0],
                    "Stiffness": [70e3, 550e3, 550e3],
                    "Damping": [5e3, 5e3, 5e3],
                    }
@@ -26,15 +26,15 @@ pipe_properties = {"E": 210e9,
 
 # Force settings
 force = {"Coordinates": [75, 0, 0],
-         "Frequency": 50,
-         "Amplitude": 10e6,
+         "Frequency": 20,
+         "Amplitude": 100e6,
          "DOF": "01000",
          "Time": 5,
          "Time_step": 0.005}
 
 
-# Newmark settings
-settings = {"Damping_parameters": [1, 0.01, 30, 0.01],
+# Rayleigh and Newmark settings
+settings = {"Damping_parameters": [1, 0.01, 100, 0.01],
             "Newmark_beta": 0.25,
             "Newmark_gamma": 0.5,
             }
@@ -42,4 +42,3 @@ settings = {"Damping_parameters": [1, 0.01, 30, 0.01],
 # run code
 pipe_fem([p1, p2, p3, p4, p5], element_size, soil_properties, pipe_properties, force, settings,
          output_folder="results", name="data.pickle")
-

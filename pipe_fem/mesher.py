@@ -27,9 +27,7 @@ class Generate:
         self.nodes = np.insert(aux_nodes, 0, np.linspace(1, len(aux_nodes), len(aux_nodes)), axis=1)
 
         # elements
-        elem = []
-        for i in range(len(self.nodes) - 1):
-            elem.append([i+1, self.nodes[i, 0], self.nodes[i + 1, 0]])
+        elem = [[i + 1, self.nodes[i, 0], self.nodes[i + 1, 0]] for i in range(len(self.nodes) - 1)]
 
         self.elements = np.array(elem)
 
@@ -47,9 +45,7 @@ class Generate:
 
 def split(start, end, segments):
     delta = (end - start) / segments
-    points = []
-    for i in range(1, segments):
-        points.append(start + i * delta)
+    points = [start + i * delta for i in range(1, segments)]
     return np.array([start] + points + [end])
 
 

@@ -43,4 +43,4 @@ def pipe_fem(points, element_size, soil_properties, pipe_properties, force, sett
     print("Saving output")
     # parse data
     create_output(mesh, solver, output_folder, name)
-    plot_geometry(mesh, output_folder, "mesh.png")
+    plot_geometry(mesh, force["Coordinates"], soil_properties["Coordinates"], output_folder, "mesh.png")

@@ -64,15 +64,6 @@ def gen_stiff(nodes: np.ndarray, elements: np.ndarray, materials: dict):
 
         k_global[elem_dof.reshape(12, 1), elem_dof] = k_global[elem_dof.reshape(12, 1), elem_dof] + aux
 
-    # # apply boundary conditions - penalty method
-    # node_bc = nodes[-2][0]
-    # boundary = "000100"
-    # i1 = 0 + (node_bc - 0) * 6
-    # i2 = 6 + (node_bc - 0) * 6
-    # # apply the penalty factor
-    # for idx, val in enumerate(range(int(i1), int(i2))):
-    #     k_global[val, val] += int(boundary[idx]) * 1e20
-
     return k_global
 
 
@@ -508,7 +499,7 @@ def rot_matrix(tx, ty, tz):
 
         rot = T_alpha.dot(T_gamma).dot(T_beta)
 
-    for i in range(0, 4):
+    for i in range(4):
         a = 0 + (i-0) * 3
         rot_full[a:a + 3, a: a + 3] = rot
 
