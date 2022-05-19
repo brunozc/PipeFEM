@@ -35,9 +35,13 @@ class Generate:
         self.soil_props = [False] * len(self.nodes)
 
     def soil_materials(self, coord_start):
+        """
+        Determine the nodes where soil exists (distance to origin >= coord_start)
 
-        idx = np.where(np.linalg.norm(np.array(self.nodes)[:, 1:]-np.array(self.nodes)[0, 1:], axis=1)
-                       >= np.linalg.norm(np.array(coord_start)-np.array(self.nodes)[0, 1:]))[0]
+        :param coord_start: list of bools
+        """
+
+        idx = np.where(np.array(self.nodes)[:, 2] <= coord_start)[0]
 
         for i in idx:
             self.soil_props[i] = True

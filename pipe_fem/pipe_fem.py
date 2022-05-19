@@ -10,14 +10,14 @@ def pipe_fem(points, element_size, soil_properties, pipe_properties, force, sett
     print("Generating mesh")
     # generate mesh
     mesh = Generate(points[0], points[1], points[2], points[3], points[4], element_size)
-    mesh.soil_materials(soil_properties["Coordinates"])
+    mesh.soil_materials(soil_properties["Y ground"])
 
     print("Assembling matrices")
     # matrix generation and assemblage
     k_pipe = assembler.gen_stiff(mesh.nodes, mesh.elements, pipe_properties)
     m_pipe = assembler.gen_mass(mesh.nodes, mesh.elements, pipe_properties)
-    k_soil = assembler.gen_stiff_soil(mesh.nodes, mesh.elements, soil_properties)
-    c_soil = assembler.gen_damp_soil(mesh.nodes, mesh.elements, soil_properties)
+    k_soil = assembler.gen_stiff_soil(mesh.nodes, mesh.elements, mesh.soil_props, soil_properties)
+    c_soil = assembler.gen_damp_soil(mesh.nodes, mesh.elements, mesh.soil_props, soil_properties)
 
     # absorbing BC
     f_abs = assembler.absorbing_bc(mesh.nodes, mesh.elements, pipe_properties)
@@ -33,7 +33,7 @@ def pipe_fem(points, element_size, soil_properties, pipe_properties, force, sett
 
     print("Generating external force")
     # force
-    time, force_ext = assembler.external_force(mesh.nodes, force)
+    time, force_ext, id_node_force = assembler.external_force(mesh.nodes, force)
 
     print("Solver")
     # solver
@@ -43,4 +43,4 @@ def pipe_fem(points, element_size, soil_properties, pipe_properties, force, sett
     print("Saving output")
     # parse data
     create_output(mesh, solver, output_folder, name)
-    plot_geometry(mesh, force["Coordinates"], soil_properties["Coordinates"], output_folder, "mesh")
+    plot_geometry(mesh, id_node_force, mesh.soil_props, output_folder, "mesh")

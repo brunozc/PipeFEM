@@ -9,7 +9,7 @@ p5 = [750, 0, 0]
 element_size = 0.25
 
 # Soil properties
-soil_properties = {"Coordinates": [-10, 10, 0],
+soil_properties = {"Y ground": 100,
                    "Stiffness": [70e3, 550e3, 550e3],
                    "Damping": [5e3, 5e3, 5e3],
                    }
@@ -31,7 +31,6 @@ force = {"Coordinates": [75, 0, 0],
          "DOF": "01000",
          "Time": 5,
          "Time_step": 0.005}
-
 
 # Rayleigh and Newmark settings
 settings = {"Damping_parameters": [1, 0.01, 100, 0.01],

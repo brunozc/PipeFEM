@@ -27,18 +27,17 @@ def create_output(mesh, solver, output_folder, name):
     return results
 
 
-def plot_geometry(mesh, load, soils, output_folder, name):
+def plot_geometry(mesh, idx_load, soils, output_folder, name):
 
     if not os.path.isdir(output_folder):
         os.makedirs(output_folder)
 
     # find first soil index
-    idx_soil = np.where(np.linalg.norm(mesh.nodes[:, 1:] - mesh.nodes[0, 1:], axis=1) -
-                        np.linalg.norm(soils - mesh.nodes[0, 1:]) >= 0)[0][0]
+    idx_soil = np.where(np.array(soils))[0][0]
 
     # find first load index
-    idx_load = np.where(np.linalg.norm(mesh.nodes[:, 1:] - mesh.nodes[0, 1:], axis=1) -
-                        np.linalg.norm(load - mesh.nodes[0, 1:]) >= 0)[0][0]
+    # idx_load = np.where(np.linalg.norm(mesh.nodes[:, 1:] - mesh.nodes[0, 1:], axis=1) -
+    #                     np.linalg.norm(load - mesh.nodes[0, 1:]) >= 0)[0][0]
 
     fig, ax = plt.subplots()
     # plot mesh
@@ -54,11 +53,11 @@ def plot_geometry(mesh, load, soils, output_folder, name):
     plt.savefig(os.path.join(output_folder, f"{name}.png"))
     plt.close()
 
-    # dump file
+    # dump mesh file
     with open(os.path.join(output_folder, f"{name}.csv"), "w") as fo:
         fo.write("Node;X coord;Y coord;Z coord\n")
         for m in mesh.nodes:
-            fo.write(";".join(map(str, m))+ "\n")
+            fo.write(";".join(map(str, m)) + "\n")
 
     return
 

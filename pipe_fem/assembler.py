@@ -67,7 +67,7 @@ def gen_stiff(nodes: np.ndarray, elements: np.ndarray, materials: dict):
     return k_global
 
 
-def gen_stiff_soil(nodes: np.ndarray, elements: np.ndarray, soils: dict):
+def gen_stiff_soil(nodes: np.ndarray, elements: np.ndarray, soil_index: list, soils: dict):
     r"""
     Global stiffness generation.
 
@@ -77,6 +77,8 @@ def gen_stiff_soil(nodes: np.ndarray, elements: np.ndarray, soils: dict):
     :type nodes: np.ndarray
     :param elements: Elements
     :type elements: np.ndarray
+    :param soil_index: Index where soil exists
+    :type soil_index: list
     :param soils: Materials properties
     :type elements: dict
 
@@ -87,7 +89,7 @@ def gen_stiff_soil(nodes: np.ndarray, elements: np.ndarray, soils: dict):
     k_soil = lil_matrix((nodes.shape[0] * 6, nodes.shape[0] * 6))
 
     # find first soil index
-    idx_start = np.where(np.linalg.norm(nodes[:, 1:]-nodes[0, 1:], axis=1) - np.linalg.norm(soils["Coordinates"]-nodes[0, 1:]) >= 0)[0][0]
+    idx_start = np.where(np.array(soil_index))[0][0]
 
     # assemblage of stiffness matrix
     for a in range(elements.shape[0]):
@@ -191,7 +193,7 @@ def gen_mass(nodes: np.ndarray, elements: np.ndarray, materials: dict):
     return m_global
 
 
-def gen_damp_soil(nodes: np.ndarray, elements: np.ndarray, soils: dict):
+def gen_damp_soil(nodes: np.ndarray, elements: np.ndarray, soil_index: list, soils: dict):
     r"""
     Global stiffness generation.
 
@@ -201,6 +203,8 @@ def gen_damp_soil(nodes: np.ndarray, elements: np.ndarray, soils: dict):
     :type nodes: np.ndarray
     :param elements: Elements
     :type elements: np.ndarray
+    :param soil_index: Index where soil exists
+    :type soil_index: list
     :param soils: Materials properties
     :type elements: dict
 
@@ -211,7 +215,7 @@ def gen_damp_soil(nodes: np.ndarray, elements: np.ndarray, soils: dict):
     c_soil = lil_matrix((nodes.shape[0] * 6, nodes.shape[0] * 6))
 
     # find first soil index
-    idx_start = np.where(np.linalg.norm(nodes[:, 1:]-nodes[0, 1:], axis=1) - np.linalg.norm(soils["Coordinates"]-nodes[0, 1:]) >= 0)[0][0]
+    idx_start = np.where(np.array(soil_index))[0][0]
 
     # assemblage of damping matrix
     for a in range(elements.shape[0]):
@@ -585,7 +589,13 @@ def abs_matrix(rho, vp, vs, A, param, dL):
 
 
 def external_force(nodes, force_properties):
+    """
+    Compute external force
 
+    :param nodes: list of nodes
+    :param force_properties: Dictionary with force settings
+    :return: time, force, index of the node where the load is applied
+    """
     time = np.linspace(0,
                        force_properties["Time"],
                        int(np.ceil(force_properties["Time"] / force_properties["Time_step"] + 1)))
@@ -608,7 +618,7 @@ def external_force(nodes, force_properties):
     # add force
     force[i1:i2, :] = (np.tile(force_properties["Amplitude"] * np.sin(2 * np.pi * float(force_properties["Frequency"]) * time), (6, 1)).T * aux).T
 
-    return time, force
+    return time, force, id_node
 
 
 def stiff_soil(kxx, kyy, kzz, kyz, dL):
