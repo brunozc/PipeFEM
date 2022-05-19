@@ -51,8 +51,14 @@ def plot_geometry(mesh, load, soils, output_folder, name):
     ax.set_xlabel("X dimension [m]")
     ax.set_ylabel("Y dimension [m]")
     ax.grid()
-    plt.savefig(os.path.join(output_folder, name))
+    plt.savefig(os.path.join(output_folder, f"{name}.png"))
     plt.close()
+
+    # dump file
+    with open(os.path.join(output_folder, f"{name}.csv"), "w") as fo:
+        fo.write("Node;X coord;Y coord;Z coord\n")
+        for m in mesh.nodes:
+            fo.write(";".join(map(str, m))+ "\n")
 
     return
 
