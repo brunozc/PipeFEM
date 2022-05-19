@@ -35,10 +35,7 @@ def plot_geometry(mesh, idx_load, soils, output_folder, name):
     # find first soil index
     idx_soil = np.where(np.array(soils))[0][0]
 
-    # find first load index
-    # idx_load = np.where(np.linalg.norm(mesh.nodes[:, 1:] - mesh.nodes[0, 1:], axis=1) -
-    #                     np.linalg.norm(load - mesh.nodes[0, 1:]) >= 0)[0][0]
-
+    # plot
     fig, ax = plt.subplots()
     # plot mesh
     ax.plot(np.array(mesh.nodes)[:, 1], np.array(mesh.nodes)[:, 2], marker='o', markersize=1, color="k")
@@ -78,23 +75,29 @@ def plot_time_history_node(results, node, output_folder, name, key="Displacement
     return
 
 
-def make_movie(results, output_folder, name, scale_fct=1000, tmp_folder="tmp", step=10):
+def make_movie(results, output_folder, name, scale_fct=1000, tmp_folder="tmp", step=10, node_start=None):
 
     if not os.path.isdir(os.path.join(output_folder, tmp_folder)):
         os.makedirs(os.path.join(output_folder, tmp_folder))
 
     time = results["node 1"]["Time"]
 
+    list_nodes = list(results.keys())
+    if node_start is not None:
+        nods = [i.split(" ")[-1] for i in list(list_nodes)]
+        idx = nods.index(str(int(node_start)))
+        list_nodes = [list_nodes[i] for i in range(idx, len(list_nodes))]
+
     # initial geometry
     x, y = [], []
-    for node in results.keys():
+    for node in list_nodes:
         x.append(results[node]["Coordinates"][0])
         y.append(results[node]["Coordinates"][1])
 
     for i in range(0, len(time), step):
 
         x_t, y_t = [], []
-        for node in results.keys():
+        for node in list_nodes:
             x_t.append(results[node]["Coordinates"][0] + results[node]["Displacement"][i, 0] * scale_fct)
             y_t.append(results[node]["Coordinates"][1] + results[node]["Displacement"][i, 1] * scale_fct)
 
@@ -103,8 +106,8 @@ def make_movie(results, output_folder, name, scale_fct=1000, tmp_folder="tmp", s
         xlimits = ax.get_xlim()
         ylimits = ax.get_ylim()
         ax.plot(x_t, y_t, color='b')
-        ax.set_xlabel("Time [s]")
-        ax.set_ylabel("Displacement [m]")
+        ax.set_xlabel("X distance [m]")
+        ax.set_ylabel("Y distance [m]")
         ax.set_title(f"Time: {time[i]: .4f} s")
         ax.set_xlim(xlimits)
         ax.set_ylim(ylimits)

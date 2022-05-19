@@ -28,7 +28,7 @@ pipe_properties = {"E": 210e9,
 force = {"Coordinates": [75, 0, 0],
          "Frequency": 20,
          "Amplitude": 100e6,
-         "DOF": "01000",
+         "DOF": "010000",
          "Time": 5,
          "Time_step": 0.005}
 

@@ -20,3 +20,4 @@ plt.show()
 
 # make movie
 make_movie(data, "results", "displacement_field.gif", scale_fct=1e4, step=2)
+make_movie(data, "results", "displacement_detail_field.gif", scale_fct=1e2, step=2, node_start=3109)
