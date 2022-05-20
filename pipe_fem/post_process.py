@@ -108,6 +108,8 @@ def make_movie(results, output_folder, name, scale_fct=1000, tmp_folder="tmp", s
             for node in list_nodes:
                 x_lim.append(results[node]["Coordinates"][0] + results[node]["Displacement"][i, 0] * scale_fct)
                 y_lim.append(results[node]["Coordinates"][1] + results[node]["Displacement"][i, 1] * scale_fct)
+        y_lim = np.max(np.abs(np.array(y_lim)))
+
 
     # plot time steps
     for i in range(0, len(time), step):
@@ -120,7 +122,7 @@ def make_movie(results, output_folder, name, scale_fct=1000, tmp_folder="tmp", s
         ax.plot(x, y, color='k')
         if normalise:
             xlimits = (np.min(x_lim), np.max(x_lim))
-            ylimits = (np.min(y_lim), np.max(y_lim))
+            ylimits = (-y_lim, y_lim)
         else:
             xlimits = ax.get_xlim()
             ylimits = ax.get_ylim()
