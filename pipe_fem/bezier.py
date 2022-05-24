@@ -24,7 +24,7 @@ class Quadratic:
     def compute_coordinates(self):
         for i, t in enumerate(np.linspace(0, 1, self.nb_divs)):
             self.coordinates[i, :] = (1 - t) ** 2 * self.p0 +\
-                                     2 * t * (1 - self.nb_divs) * self.p1 +\
+                                     2 * t * (1 - t) * self.p1 +\
                                      t ** 2 * self.p2
 
     def compute_length(self):
