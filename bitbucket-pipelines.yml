@@ -16,5 +16,4 @@ pipelines:
             caches:
                 - pip
             script:
-                - source ./venv/bin/activate
                 - pytest -v  ./tests
