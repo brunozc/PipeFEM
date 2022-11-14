@@ -1,0 +1,20 @@
+#  Template python-build
+
+pipelines:
+  default:
+    - step:
+        name: Install requirements.
+        caches:
+          - pip
+        script: # Modify the commands below to build your repository.
+          - python3 -m venv ./venv
+          - source ./venv/bin/activate
+          - pip install -r requirements.txt
+    - parallel:
+        - step: # Run tests
+            name: Run tests.
+            caches:
+                - pip
+            script:
+                - source ./venv/bin/activate
+                - pytest -v  ./tests

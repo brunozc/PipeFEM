@@ -1,5 +1,5 @@
 import numpy as np
-from pypardiso import spsolve
+from scipy.sparse.linalg import splu, spsolve
 from tqdm import tqdm
 
 
@@ -20,9 +20,7 @@ def init(m_global, c_global, k_global, force_ini, u, v):
     k_part = k_global.dot(u)
     c_part = c_global.dot(v)
 
-    # initial acceleration
-    a = spsolve(m_global.tocsr(), force_ini - c_part - k_part)
-    return a
+    return spsolve(m_global.tocsr(), force_ini - c_part - k_part)
 
 
 class Solver:
@@ -78,6 +76,7 @@ class Solver:
 
         # combined stiffness matrix
         K_till = K + C.dot(gamma / (beta * t_step)) + M.dot(1 / (beta * t_step ** 2))
+        inv_K_till = splu(K_till.tocsc())
 
         # define progress bar
         pbar = tqdm(total=int(len(self.time) - 1), unit_scale=True, unit_divisor=1000, unit="steps")
@@ -101,7 +100,8 @@ class Solver:
             force_ext = d_force.toarray()[:, 0] + m_part + c_part - np.transpose(F_abs.tocsr()) * dv
 
             # solve
-            du = spsolve(K_till, force_ext)
+            # du = spsolve(K_till, force_ext)
+            du = inv_K_till.solve(force_ext)
 
             # velocity calculated through Newmark relation
             dv = du.dot(gamma / (beta * t_step)) - v.dot(gamma / beta) + a.dot(t_step * (1 - gamma / (2 * beta)))

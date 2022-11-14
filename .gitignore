@@ -1,0 +1,7 @@
+# venv artifact files
+__*/
+venv/
+.vscode/
+build/
+SimplePipe*/
+result*/

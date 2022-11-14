@@ -29,8 +29,19 @@ force = {"Coordinates": [75, 0, 0],
          "Frequency": 20,
          "Amplitude": 100e6,
          "DOF": "010000",
-         "Time": 5,
+         "Time": 3,
          "Time_step": 0.005}
+
+
+
+# # Force settings
+# force = {"Coordinates": [[75, 0, 0], [50, 0, 0]]
+#          "Frequency": [20, 20],
+#          "Amplitude": [100e6, 100e6],
+#          "Phase": [[pi, 2 *pi]],
+#          "DOF": ["010000", "010000"],
+#          "Time": 5,
+#          "Time_step": 0.005}
 
 # Rayleigh and Newmark settings
 settings = {"Damping_parameters": [1, 0.01, 100, 0.01],
