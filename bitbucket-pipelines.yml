@@ -9,11 +9,14 @@ pipelines:
         caches:
           - pip
         script: # Modify the commands below to build your repository.
+          - apt-get install python3-venv
+          - python -m venv ./venv
+          - source ./venv/bin/activate
           - pip install -r requirements.txt
-    - parallel:
-        - step: # Run tests
-            name: Run tests.
-            caches:
-                - pip
-            script:
-                - pytest -v ./tests
+      - step: # Run tests
+          name: Run tests.
+          caches:
+              - pip
+          script:
+              - source ./venv/bin/activate
+              - pytest -v ./tests
