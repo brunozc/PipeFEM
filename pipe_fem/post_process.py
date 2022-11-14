@@ -42,7 +42,8 @@ def plot_geometry(mesh, idx_load, soils, output_folder, name):
     # plot soil
     ax.plot(np.array(mesh.nodes)[idx_soil:, 1], np.array(mesh.nodes)[idx_soil:, 2], marker='o', markersize=1, color="g")
     # plot load
-    ax.plot(np.array(mesh.nodes)[idx_load, 1], np.array(mesh.nodes)[idx_load, 2], marker='D', markersize=6, color="b")
+    for i in idx_load:
+        ax.plot(np.array(mesh.nodes)[i, 1], np.array(mesh.nodes)[i, 2], marker='D', markersize=6, color="b")
 
     ax.set_xlabel("X dimension [m]")
     ax.set_ylabel("Y dimension [m]")

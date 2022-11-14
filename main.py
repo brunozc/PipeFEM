@@ -1,4 +1,7 @@
+import numpy as np
+
 from pipe_fem.pipe_fem import pipe_fem
+
 
 # Geometry
 p1 = [-500, 500, 0]
@@ -25,23 +28,13 @@ pipe_properties = {"E": 210e9,
                    }
 
 # Force settings
-force = {"Coordinates": [75, 0, 0],
-         "Frequency": 20,
-         "Amplitude": 100e6,
-         "DOF": "010000",
+force = {"Coordinates": [[75, 0, 0], [75, 0, 0]],
+         "Frequency": [20, 20],
+         "Amplitude": [100e6, 100e6],
+         "Phase": [0, np.pi / 4],
+         "DOF": ["010000", "010000"],
          "Time": 3,
          "Time_step": 0.005}
-
-
-
-# # Force settings
-# force = {"Coordinates": [[75, 0, 0], [50, 0, 0]]
-#          "Frequency": [20, 20],
-#          "Amplitude": [100e6, 100e6],
-#          "Phase": [[pi, 2 *pi]],
-#          "DOF": ["010000", "010000"],
-#          "Time": 5,
-#          "Time_step": 0.005}
 
 # Rayleigh and Newmark settings
 settings = {"Damping_parameters": [1, 0.01, 100, 0.01],

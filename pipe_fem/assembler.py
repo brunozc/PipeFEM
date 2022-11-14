@@ -603,22 +603,29 @@ def external_force(nodes, force_properties):
     # generation of variable
     force = lil_matrix((nodes.shape[0] * 6, len(time)))
 
-    # find node where load is applied
-    id_node = np.argmin(np.sqrt(np.sum((nodes[:, 1:] - force_properties["Coordinates"])**2, axis=1)))
+    id_nodes = []
+    for id_f, force_coord in enumerate(force_properties["Coordinates"]):
 
-    i1 = 0 + (id_node - 0) * 6
-    i2 = 6 + (id_node - 0) * 6
+        # find node where load is applied: always the closest to
+        id_node = np.argmin(np.sqrt(np.sum((nodes[:, 1:] - force_coord)**2, axis=1)))
 
-    # determine DOF of the load
-    aux = np.zeros(6)
-    for i, val in enumerate(force_properties["DOF"]):
-        if val == "1":
-            aux[i] = 1
+        i1 = 0 + (id_node - 0) * 6
+        i2 = 6 + (id_node - 0) * 6
 
-    # add force
-    force[i1:i2, :] = (np.tile(force_properties["Amplitude"] * np.sin(2 * np.pi * float(force_properties["Frequency"]) * time), (6, 1)).T * aux).T
+        # determine DOF of the load
+        aux = np.zeros(6)
+        for i, val in enumerate(force_properties["DOF"][id_f]):
+            if val == "1":
+                aux[i] = 1
 
-    return time, force, id_node
+        # add force
+        force[i1:i2, :] = force[i1:i2, :] + (np.tile(force_properties["Amplitude"][id_f] *
+                                             np.sin(2 * np.pi * float(force_properties["Frequency"][id_f]) * time +
+                                             force_properties["Phase"][id_f] + force_properties["Phase"][id_f]), (6, 1)).T * aux).T
+        # add id nodes
+        id_nodes.append(id_node)
+
+    return time, force, id_nodes
 
 
 def stiff_soil(kxx, kyy, kzz, kyz, dL):
