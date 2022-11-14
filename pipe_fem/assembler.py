@@ -534,7 +534,6 @@ def damping(damp):
     """
 
     # import packages
-    import numpy as np
     f1 = damp[0]
     d1 = damp[1]
     f2 = damp[2]
@@ -619,9 +618,9 @@ def external_force(nodes, force_properties):
                 aux[i] = 1
 
         # add force
-        force[i1:i2, :] = force[i1:i2, :] + (np.tile(force_properties["Amplitude"][id_f] *
-                                             np.sin(2 * np.pi * float(force_properties["Frequency"][id_f]) * time +
-                                             force_properties["Phase"][id_f] + force_properties["Phase"][id_f]), (6, 1)).T * aux).T
+        force[i1:i2, :] = force[i1:i2, :] + \
+            (np.tile(force_properties["Amplitude"][id_f] * \
+                np.sin(2 * np.pi * float(force_properties["Frequency"][id_f]) * time + force_properties["Phase"][id_f]), (6, 1)).T * aux).T
         # add id nodes
         id_nodes.append(id_node)
 
@@ -690,10 +689,6 @@ def damp_soil(cx, cy, cz, dL):
 
     :return c_local: Local soil damping matrix.
     """
-
-    # import packages
-    import numpy as np
-
     # local stiffness matrix
     c_local = np.zeros((12, 12))
 
