@@ -13,10 +13,10 @@ pipelines:
           - python -m venv ./venv
           - source ./venv/bin/activate
           - pip install -r requirements.txt
-      - step: # Run tests
-          name: Run tests.
-          caches:
-              - pip
-          script:
-              - source ./venv/bin/activate
-              - pytest -v ./tests
+    - step: # Run tests
+        name: Run tests.
+        caches:
+          - pip
+        script:
+          - source ./venv/bin/activate
+          - pytest -v ./tests
