@@ -1,5 +1,7 @@
 #  Template python-build
 
+image: python:3.10.6
+
 pipelines:
   default:
     - step:
