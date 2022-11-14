@@ -16,4 +16,4 @@ pipelines:
             caches:
                 - pip
             script:
-                - pytest -v  ./tests
+                - pytest -v ./tests
