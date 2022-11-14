@@ -27,20 +27,21 @@ class TestPipe(unittest.TestCase):
                         }
         # Pipe properties
         pipe_properties = {"E": 210e9,
-                        "Density": 2000,
-                        "Poisson": 0.2,
-                        "Area": 0.001,
-                        "Iy": 0.00035,
-                        "Iz": 0.00035,
-                        "J": 0.0077,
-                        "rg": 0.02,
-                        }
+                           "Density": 2000,
+                           "Poisson": 0.2,
+                           "Area": 0.001,
+                           "Iy": 0.00035,
+                           "Iz": 0.00035,
+                           "J": 0.0077,
+                           "rg": 0.02,
+                           }
 
         # Force settings
-        force = {"Coordinates": [75, 0, 0],
-                "Frequency": 20,
-                "Amplitude": 100e6,
-                "DOF": "010000",
+        force = {"Coordinates": [[75, 0, 0]],
+                "Frequency": [20],
+                "Amplitude": [100e6],
+                "Phase": [np.pi],
+                "DOF": ["010000"],
                 "Time": 3,
                 "Time_step": 0.005}
 
