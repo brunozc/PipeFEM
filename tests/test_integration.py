@@ -37,7 +37,7 @@ class TestPipe(unittest.TestCase):
                            }
 
         # Force settings
-        force = {"Coordinates": [[75, 0, 0]],
+        force = {"Coordinates": [75, 0, 0],
                 "Frequency": [20],
                 "Amplitude": [100e6],
                 "Phase": [np.pi],
