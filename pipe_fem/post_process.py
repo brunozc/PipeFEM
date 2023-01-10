@@ -139,6 +139,7 @@ def make_movie(results, output_folder, name, scale_fct=1000, tmp_folder="tmp", s
 
     # make de video
     filenames = os.listdir(os.path.join(output_folder, tmp_folder))
+    filenames.sort()
     with imageio.get_writer(os.path.join(output_folder, name), mode='I', fps=10) as writer:
         for filename in filenames:
             image = imageio.imread(os.path.join(os.path.join(output_folder, tmp_folder), filename))
