@@ -8,7 +8,7 @@ import pipe_fem.assembler as assembler
 
 
 def pipe_fem(points, element_size, soil_properties, pipe_properties, force, settings, reduction_values=None,
-             output_folder="./", name="data.pickle", max_iterations=100, tol=1e-2, num_cycles=4):
+             output_folder="./", name="data.pickle", max_iterations=100, tol=1e-2, nb_cycles=4):
     r"""
     Main program to run the finite element analysis
 
@@ -23,7 +23,7 @@ def pipe_fem(points, element_size, soil_properties, pipe_properties, force, sett
     name: name of the file to save the results
     max_iterations: maximum number of iterations for equivalent linear elastic analysis
     tol: tolerance for equivalent linear elastic analysis
-    num_cycles: number of cycles to compute the maximum displacement for equivalent linear elastic analysis
+    nb_cycles: number of cycles to compute the maximum displacement for equivalent linear elastic analysis
     """
 
     print("Generating mesh")
@@ -49,10 +49,10 @@ def pipe_fem(points, element_size, soil_properties, pipe_properties, force, sett
             pipe_properties["Density"] = initial_density * parameter_update(initial_displacement, reduction_values[0], reduction_values[1])
             soil_properties["Stiffness"][idx_force] = initial_stiffness[idx_force] * parameter_update(initial_displacement, reduction_values[0], reduction_values[2])
             soil_properties["Damping"][idx_force] = initial_damping[idx_force] * parameter_update(initial_displacement, reduction_values[0], reduction_values[3])
-            results, id_node_force = run_solve(mesh, pipe_properties, soil_properties, force, settings, output_folder, name)
+            results, id_node_force = run_solve(mesh, pipe_properties, soil_properties, force, settings)
 
-            displacement = collect_peaks(mesh.nodes, results, min(
-                                        force["Frequency"]), num_cycles, "Displacement", idx_force)
+            displacement = collect_peaks(mesh.nodes, results, min(force["Frequency"]),
+                                         nb_cycles, "Displacement", idx_force)
             # check convergency
             error = np.linalg.norm(np.abs((displacement - initial_displacement) / displacement))
             print(f"Iteration {iter} error: {round(error * 100, 1)}%")
@@ -63,7 +63,7 @@ def pipe_fem(points, element_size, soil_properties, pipe_properties, force, sett
 
             iter += 1  # update iteration counter
     else:
-        results, id_node_force = run_solve(mesh, pipe_properties, soil_properties, force, settings, output_folder, name)
+        results, id_node_force = run_solve(mesh, pipe_properties, soil_properties, force, settings)
     # write results
     write_output(mesh, results, id_node_force, output_folder, name)
 
