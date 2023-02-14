@@ -50,4 +50,4 @@ reduction_values = [[25, 50, 100, 200],  # cyclic displacement
 
 # run code
 pipe_fem([p1, p2, p3, p4, p5], element_size, soil_properties, pipe_properties, force, settings, reduction_values,
-         output_folder="results_iter", name="data.pickle", max_iterations=100, tol=1e-2)
+         output_folder="results_iter", name="data.pickle", max_iterations=100, tol=1e-2, nb_cycles=4)
