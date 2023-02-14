@@ -1,5 +1,4 @@
 import numpy as np
-
 from pipe_fem.pipe_fem import pipe_fem
 
 
@@ -42,6 +41,13 @@ settings = {"Damping_parameters": [1, 0.01, 100, 0.01],
             "Newmark_gamma": 0.5,
             }
 
+
+reduction_values = [[25, 50, 100, 200],  # cyclic displacement
+                    [1, 1.1, 1.2, 1.2],  # factor density
+                    [1, .9, .8, .5],  # factor stiffness
+                    [1, .9, .8, .5],  # factor damping
+                    ]
+
 # run code
-pipe_fem([p1, p2, p3, p4, p5], element_size, soil_properties, pipe_properties, force, settings,
-         output_folder="results", name="data.pickle")
+pipe_fem([p1, p2, p3, p4, p5], element_size, soil_properties, pipe_properties, force, settings, reduction_values,
+         output_folder="results_iter", name="data.pickle", max_iterations=100, tol=1e-2)

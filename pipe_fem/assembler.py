@@ -110,10 +110,19 @@ def gen_stiff_soil(nodes: np.ndarray, elements: np.ndarray, soil_index: list, so
         ty = (nodes[id_node2, 2] - nodes[id_node1, 2]) / elem_size
         tz = (nodes[id_node2, 3] - nodes[id_node1, 3]) / elem_size
 
-        # read soil properties
-        kx = soils["Stiffness"][0]
-        ky = soils["Stiffness"][1]
-        kz = soils["Stiffness"][2]
+        if isinstance(soils["Stiffness"][0], np.ndarray):
+            kx = np.mean([soils["Stiffness"][0][id_node1], soils["Stiffness"][0][id_node1]])
+        else:
+            kx = soils["Stiffness"][0]
+        if isinstance(soils["Stiffness"][1], np.ndarray):
+            ky = np.mean([soils["Stiffness"][1][id_node1], soils["Stiffness"][1][id_node1]])
+        else:
+            ky = soils["Stiffness"][1]
+        if isinstance(soils["Stiffness"][2], np.ndarray):
+            kz = np.mean([soils["Stiffness"][2][id_node1], soils["Stiffness"][2][id_node1]])
+        else:
+            kz = soils["Stiffness"][2]
+
         kyz = 0
 
         # local stiffness matrix
@@ -172,7 +181,11 @@ def gen_mass(nodes: np.ndarray, elements: np.ndarray, materials: dict):
         tz = (nodes[id_node2, 3] - nodes[id_node1, 3]) / elem_size
 
         # read material properties
-        rho = materials['Density']
+        if isinstance(materials['Density'], np.ndarray):
+            # for the case of equivalent linear
+            rho = np.mean([materials['Density'][id_node1], materials['Density'][id_node2]])
+        else:
+            rho = materials['Density']
         A = materials['Area']
         rg = materials['rg']
 
@@ -236,10 +249,18 @@ def gen_damp_soil(nodes: np.ndarray, elements: np.ndarray, soil_index: list, soi
         ty = (nodes[id_node2, 2] - nodes[id_node1, 2]) / elem_size
         tz = (nodes[id_node2, 3] - nodes[id_node1, 3]) / elem_size
 
-        # read soil properties
-        cx = soils["Damping"][0]
-        cy = soils["Damping"][1]
-        cz = soils["Damping"][2]
+        if isinstance(soils["Damping"][0], np.ndarray):
+            cx = np.mean([soils["Damping"][0][id_node1], soils["Damping"][0][id_node1]])
+        else:
+            cx = soils["Damping"][0]
+        if isinstance(soils["Damping"][1], np.ndarray):
+            cy = np.mean([soils["Damping"][1][id_node1], soils["Damping"][1][id_node1]])
+        else:
+            cy = soils["Damping"][1]
+        if isinstance(soils["Damping"][2], np.ndarray):
+            cz = np.mean([soils["Damping"][2][id_node1], soils["Damping"][2][id_node1]])
+        else:
+            cz = soils["Damping"][2]
 
         # local damping matrix - in global directions
         c_local = damp_soil(cx, cy, cz, elem_size)
@@ -752,7 +773,12 @@ def absorbing_bc(nodes: np.ndarray, elements: np.ndarray, materials: dict, param
 
             # read material properties
             E = materials['E']
-            rho = materials["Density"]
+            # read material properties
+            if isinstance(materials['Density'], np.ndarray):
+                # for the case of equivalent linear
+                rho = np.mean([materials['Density'][id_node1], materials['Density'][id_node2]])
+            else:
+                rho = materials['Density']
             area = materials["Area"]
             poisson = materials["Poisson"]
             Ec = E * (1 - poisson) / ((1 + poisson) * (1 - 2 * poisson))
