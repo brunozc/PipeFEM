@@ -5,3 +5,5 @@ venv/
 build/
 SimplePipe*/
 result*/
+*egg-info/
+.tox/
