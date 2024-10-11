@@ -57,17 +57,17 @@ class TestPipe(unittest.TestCase):
         # run code
         pipe_fem([self.p1, self.p2, self.p3, self.p4, self.p5], self.element_size,
                  self.soil_properties, self.pipe_properties, force, self.settings,
-                 output_folder="./results_test", name="data.pickle")
+                 output_folder="./tests/results_test", name="data.pickle")
 
-        with open(r"./results_test/data.pickle", "rb") as fi:
+        with open(r"./tests/results_test/data.pickle", "rb") as fi:
             data = pickle.load(fi)
 
         # write amplitudes
-        write_results_csv(data, 3129, 3150, "results_test", "amplitudes",
+        write_results_csv(data, 3129, 3150, "./tests/results_test", "amplitudes",
                           number_of_periods=2, frequency=20)
 
         # check amplitude csv file
-        with open(r"./results_test/amplitudes.csv", "r", encoding="UTF-8") as fi:
+        with open(r"./tests/results_test/amplitudes.csv", "r", encoding="UTF-8") as fi:
             data = fi.read().splitlines()
         data = [dat.split(";") for dat in data]
         with open(r"./tests/data/amplitudes.csv", "r", encoding="UTF-8") as fi:
@@ -78,7 +78,7 @@ class TestPipe(unittest.TestCase):
             assert all(np.array(val1[1:]).astype(float) - np.array(val2[1:]).astype(float) <= TOL)
 
         # check data pickle file
-        with open(r"./results_test/data.pickle", "rb") as fi:
+        with open(r"./tests/results_test/data.pickle", "rb") as fi:
             data = pickle.load(fi)
         with open("./tests/data/data.pickle", "rb") as fi:
             test_data = pickle.load(fi)
@@ -100,17 +100,17 @@ class TestPipe(unittest.TestCase):
         # run code
         pipe_fem([self.p1, self.p2, self.p3, self.p4, self.p5], self.element_size,
                  self.soil_properties, self.pipe_properties, force, self.settings,
-                 output_folder="./results_test", name="data.pickle")
+                 output_folder="./tests/results_test", name="data.pickle")
 
-        with open(r"./results_test/data.pickle", "rb") as fi:
+        with open(r"./tests/results_test/data.pickle", "rb") as fi:
             data = pickle.load(fi)
 
         # write amplitudes
-        write_results_csv(data, 3129, 3150, "results_test", "amplitudes",
+        write_results_csv(data, 3129, 3150, "./tests/results_test", "amplitudes",
                           number_of_periods=2, frequency=20)
 
         # check amplitude csv file
-        with open(r"./results_test/amplitudes.csv", "r", encoding="UTF-8") as fi:
+        with open(r"./tests/results_test/amplitudes.csv", "r", encoding="UTF-8") as fi:
             data = fi.read().splitlines()
         data = [dat.split(";") for dat in data]
         with open(r"./tests/data/amplitudes.csv", "r", encoding="UTF-8") as fi:
@@ -122,7 +122,7 @@ class TestPipe(unittest.TestCase):
                 float) - np.array(val2[1:]).astype(float) <= TOL)
 
         # check data pickle file
-        with open(r"./results_test/data.pickle", "rb") as fi:
+        with open(r"./tests/results_test/data.pickle", "rb") as fi:
             data = pickle.load(fi)
         with open("./tests/data/data.pickle", "rb") as fi:
             test_data = pickle.load(fi)
@@ -131,7 +131,7 @@ class TestPipe(unittest.TestCase):
         assert compare_dics(data, test_data)
 
     def tearDown(self):
-        shutil.rmtree("./results_test")
+        shutil.rmtree("./tests/results_test")
 
 
 def compare_dics(dic1, dic2):
@@ -142,7 +142,3 @@ def compare_dics(dic1, dic2):
             result.append(res)
 
     return all(result)
-
-
-if __name__ == "__main__":
-    unittest.main()
